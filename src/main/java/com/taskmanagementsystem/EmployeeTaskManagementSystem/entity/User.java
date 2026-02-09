@@ -3,6 +3,7 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.entity;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "users")
 public class User extends BaseEntity{
 
