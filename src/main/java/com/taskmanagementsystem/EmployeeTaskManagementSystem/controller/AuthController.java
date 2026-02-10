@@ -22,12 +22,6 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-    }
-
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequestDto request) {
 
@@ -39,6 +33,8 @@ public class AuthController {
         );
 
         String token = jwtUtil.generateToken(request.getUsername());
+
+        System.out.println(token);
 
         return LoginResponse.builder()
                 .token(token)

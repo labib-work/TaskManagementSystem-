@@ -2,11 +2,13 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.response;
 
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.Priority;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.TaskStatus;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Builder
 public class TaskResponse {
 
     private Long id;

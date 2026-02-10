@@ -3,12 +3,16 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "employees")
+@Builder
+@Data
 public class Employee extends BaseEntity{
 
     @Id

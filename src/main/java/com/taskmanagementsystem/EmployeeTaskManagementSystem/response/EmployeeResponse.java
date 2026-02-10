@@ -1,5 +1,10 @@
 package com.taskmanagementsystem.EmployeeTaskManagementSystem.response;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
 public class EmployeeResponse {
 
     private Long id;

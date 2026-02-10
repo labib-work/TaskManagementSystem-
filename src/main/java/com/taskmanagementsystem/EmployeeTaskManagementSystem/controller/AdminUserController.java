@@ -16,10 +16,6 @@ public class AdminUserController {
     @Autowired
     private UserService userService;
 
-    public AdminUserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @PostMapping
     public UserResponse createUser(
             @Valid @RequestBody CreateUserRequestDto request) {

@@ -4,6 +4,8 @@ import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.Priority;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -12,6 +14,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tasks")
+@Data
+@Builder
 public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

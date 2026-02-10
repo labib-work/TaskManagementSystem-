@@ -2,9 +2,9 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.response;
 
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.enums.Role;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class UserResponse {
 
