@@ -64,11 +64,15 @@ public class TaskServiceImpl implements TaskService{
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Task not found"));
 
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
         task.setTaskTitle(request.getTaskTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
         task.setStatus(request.getStatus());
         task.setDueDate(request.getDueDate());
+        task.setAssignedEmployee(employee);
 
         return mapToResponse(taskRepository.save(task));
     }
@@ -111,6 +115,8 @@ public class TaskServiceImpl implements TaskService{
 
         return mapToResponse(taskRepository.save(task));
     }
+
+
 
     private Employee getEmployeeFromUsername(String username) {
 

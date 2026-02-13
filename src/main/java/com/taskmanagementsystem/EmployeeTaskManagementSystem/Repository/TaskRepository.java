@@ -18,4 +18,11 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
             LocalDate start,
             LocalDate end
     );
+
+    List<Task> findByAssignedEmployeeId(Long employeeId);
+
+    void deleteByAssignedEmployeeId(Long employeeId);
+
+    boolean existsByAssignedEmployeeId(Long employeeId);
+
 }

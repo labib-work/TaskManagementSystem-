@@ -16,4 +16,7 @@ public interface TaskService {
     List<TaskResponse> getTasksDueInNext3Days(String username);
 
     TaskResponse updateTaskStatus(Long taskId, String status);
+
+
+
 }

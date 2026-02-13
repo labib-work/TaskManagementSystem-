@@ -1,10 +1,14 @@
 package com.taskmanagementsystem.EmployeeTaskManagementSystem.service;
 
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.Repository.EmployeeRepository;
+import com.taskmanagementsystem.EmployeeTaskManagementSystem.Repository.TaskRepository;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.dto.EmployeeRequestDto;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.entity.Employee;
+import com.taskmanagementsystem.EmployeeTaskManagementSystem.entity.Task;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.exceptions.ResourceNotFoundException;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.EmployeeResponse;
+import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Override
     public EmployeeResponse createEmployee(EmployeeRequestDto request) {
@@ -62,13 +69,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    @Transactional
     public void deleteEmployee(Long id) {
 
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Employee not found"));
 
-        System.out.println("paisos");
+        taskRepository.deleteByAssignedEmployeeId(employee.getId());
+
+
+       // System.out.println("paisos");
 
         employeeRepository.delete(employee);
     }
