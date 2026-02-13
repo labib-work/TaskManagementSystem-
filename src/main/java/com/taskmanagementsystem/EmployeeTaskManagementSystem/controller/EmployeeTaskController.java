@@ -31,7 +31,7 @@ public class EmployeeTaskController {
         return ResponseEntity.ok(datas);
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateStatus(
             @PathVariable Long id,
             @RequestParam String status) {
