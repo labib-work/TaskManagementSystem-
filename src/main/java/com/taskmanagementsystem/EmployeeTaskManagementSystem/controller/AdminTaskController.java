@@ -5,6 +5,8 @@ import com.taskmanagementsystem.EmployeeTaskManagementSystem.dto.TaskRequestDto;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,20 +18,23 @@ public class AdminTaskController {
     @Autowired
     private TaskService taskService;
 
-    public AdminTaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+
 
     @PostMapping
-    public TaskResponse createTask(
+    public ResponseEntity<TaskResponse> createAndAssignTask(
             @Valid @RequestBody TaskRequestDto request) {
-        return taskService.createTask(request);
+
+        TaskResponse data = taskService.createTask(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(data);
     }
 
     @PutMapping("/{id}")
-    public TaskResponse updateTask(
-            @PathVariable Long id,
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id,
             @Valid @RequestBody TaskRequestDto request) {
-        return taskService.updateTask(id, request);
+
+        TaskResponse data = taskService.updateTask(id, request);
+
+        return ResponseEntity.ok(data);
     }
 }

@@ -21,6 +21,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         // log.info("Creating employee with ID: {}", request.getEmployeeId());
 
+        if(checkRequest(request)){
+            throw new ResourceNotFoundException("Employee name and employee id cannot be null");
+        }
+
         Employee employee = Employee.builder()
                 .employeeName(request.getEmployeeName())
                 .employeeId(request.getEmployeeId())
@@ -36,9 +40,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeResponse updateEmployee(Long id, EmployeeRequestDto request) {
 
+        if(checkRequest(request)){
+            throw new ResourceNotFoundException("Employee name and employee id cannot be null");
+        }
+
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Employee not found"));
+
+        if(request.getEmail() != null && !isValidEmail(request.getEmail())) {
+            throw new ResourceNotFoundException("Invalid email");
+        }
 
         employee.setEmployeeName(request.getEmployeeName());
         employee.setDepartment(request.getDepartment());
@@ -55,6 +67,8 @@ public class EmployeeServiceImpl implements EmployeeService{
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Employee not found"));
+
+        System.out.println("paisos");
 
         employeeRepository.delete(employee);
     }
@@ -87,5 +101,21 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .email(employee.getEmail())
                 .phone(employee.getPhone())
                 .build();
+    }
+
+    private boolean checkRequest(EmployeeRequestDto request){
+
+        if(request.getEmployeeName() == null || request.getEmployeeId() == null)
+        {
+           return true;
+        }
+
+        return false;
+
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
     }
 }

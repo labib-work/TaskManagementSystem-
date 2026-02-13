@@ -4,6 +4,8 @@ import com.taskmanagementsystem.EmployeeTaskManagementSystem.dto.CreateUserReque
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.UserResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,20 +19,29 @@ public class AdminUserController {
     private UserService userService;
 
     @PostMapping
-    public UserResponse createUser(
+    public ResponseEntity<UserResponse> createUser(
             @Valid @RequestBody CreateUserRequestDto request) {
-        return userService.createUser(request);
+
+        UserResponse data = userService.createUser(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(data);
     }
 
     @GetMapping
-    public List<UserResponse> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+
+        List<UserResponse> data = userService.getAllUsers();
+
+        return ResponseEntity.ok(data);
     }
 
     @PatchMapping("/{id}")
-    public void activateDeactivateUser(
+    public ResponseEntity<Void> activateDeactivateUser(
             @PathVariable Long id,
             @RequestParam boolean active) {
+
         userService.activateDeactivateUser(id, active);
+
+        return ResponseEntity.noContent().build();
     }
 }

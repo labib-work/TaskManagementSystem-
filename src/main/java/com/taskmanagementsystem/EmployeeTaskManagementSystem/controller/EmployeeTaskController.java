@@ -3,6 +3,7 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.controller;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +17,26 @@ public class EmployeeTaskController {
     private TaskService taskService;
 
     @GetMapping
-    public List<TaskResponse> getMyTasks(Authentication authentication) {
-        return taskService.getTasksForEmployee(authentication.getName());
+    public ResponseEntity<List<TaskResponse>> getMyTasks(Authentication authentication) {
+
+        List<TaskResponse> datas = taskService.getTasksForEmployee(authentication.getName());
+
+        return ResponseEntity.ok(datas);
     }
 
     @GetMapping("/due-soon")
-    public List<TaskResponse> getTasksDueSoon(Authentication authentication) {
-        return taskService.getTasksDueInNext3Days(authentication.getName());
+    public ResponseEntity<List<TaskResponse>> getTasksDueSoon(Authentication authentication) {
+        List<TaskResponse> datas = taskService.getTasksDueInNext3Days(authentication.getName());
+
+        return ResponseEntity.ok(datas);
     }
 
-    @PatchMapping("/{id}/status")
-    public TaskResponse updateStatus(
+    @PutMapping("/{id}/status")
+    public ResponseEntity<TaskResponse> updateStatus(
             @PathVariable Long id,
             @RequestParam String status) {
-        return taskService.updateTaskStatus(id, status);
+        TaskResponse data = taskService.updateTaskStatus(id, status);
+
+        return ResponseEntity.ok(data);
     }
 }

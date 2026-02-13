@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService{
 
       // log.info("Creating user with username: {}", request.getUsername());
 
+        if(request == null)
+        {
+            throw new ResourceNotFoundException("Your username,password,role and email cannot be null");
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))

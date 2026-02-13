@@ -31,6 +31,10 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponse createTask(TaskRequestDto request) {
 
+        if(checkRequest(request)){
+            throw new ResourceNotFoundException("Task title, priority, employee id and status cannot be null");
+        }
+
         Employee employee = employeeRepository.findById(request.getEmployeeId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Employee not found"));
@@ -52,6 +56,10 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponse updateTask(Long taskId, TaskRequestDto request) {
 
+        if(checkRequest(request)){
+            throw new ResourceNotFoundException("Task title, priority, employee id and status cannot be null");
+        }
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Task not found"));
@@ -69,6 +77,7 @@ public class TaskServiceImpl implements TaskService{
     public List<TaskResponse> getTasksForEmployee(String username) {
 
         Employee employee = getEmployeeFromUsername(username);
+
 
         return taskRepository.findByAssignedEmployee(employee)
                 .stream()
@@ -128,5 +137,15 @@ public class TaskServiceImpl implements TaskService{
                 .dueDate(task.getDueDate())
                 .employeeName(task.getAssignedEmployee().getEmployeeName())
                 .build();
+    }
+
+    private boolean checkRequest(TaskRequestDto request){
+
+        if(request.getEmployeeId() == null || request.getPriority() == null ||
+                request.getTaskTitle() == null || request.getStatus() == null){
+        return true;
+        }
+
+        return false;
     }
 }

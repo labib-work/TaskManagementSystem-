@@ -23,7 +23,7 @@ public class User extends BaseEntity{
     private String username;
 
     @Column(nullable = false)
-    private String password; // BCrypt encrypted
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
