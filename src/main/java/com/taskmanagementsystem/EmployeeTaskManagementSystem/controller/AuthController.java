@@ -3,6 +3,10 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.controller;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.dto.LoginRequestDto;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.LoginResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.security.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@Tag(name = "Authentication APIs" , description = "Operations related to user authentication")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -23,6 +29,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Operation(summary = "Login")
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequestDto request) {
 

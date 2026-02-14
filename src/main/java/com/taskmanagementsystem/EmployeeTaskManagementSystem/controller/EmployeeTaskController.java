@@ -2,6 +2,7 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.controller;
 
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.service.TaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Employee Task APIs" , description = "Operations related to employee tasks")
 @RestController
 @RequestMapping("/employee/tasks")
 public class EmployeeTaskController {
