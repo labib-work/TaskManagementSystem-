@@ -19,21 +19,21 @@ import java.util.Map;
 
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    @ResponseBody
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ResponseEntity<ErrorResponseDto> handleResponse(ResourceNotFoundException ex)
-//    {
-//        ErrorResponseDto error = new ErrorResponseDto(
-//                LocalDateTime.now(),
-//                HttpStatus.NOT_FOUND.value(),
-//                ex.getMessage()
-//        );
-//
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(error);
-//    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponseDto> handleResponse(ResourceNotFoundException ex)
+    {
+        ErrorResponseDto error = new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(error);
+    }
 //
 //    @ResponseBody
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
