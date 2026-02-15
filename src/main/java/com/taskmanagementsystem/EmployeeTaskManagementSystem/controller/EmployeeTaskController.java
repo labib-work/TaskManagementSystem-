@@ -2,6 +2,7 @@ package com.taskmanagementsystem.EmployeeTaskManagementSystem.controller;
 
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class EmployeeTaskController {
     @Autowired
     private TaskService taskService;
 
+    @Operation(summary = "Get Employee Tasks")
     @GetMapping
     public ResponseEntity<List<TaskResponse>> getMyTasks(Authentication authentication) {
 
@@ -26,6 +28,7 @@ public class EmployeeTaskController {
         return ResponseEntity.ok(datas);
     }
 
+    @Operation(summary = "Get list of task that is Due in next 3 Days")
     @GetMapping("/due-soon")
     public ResponseEntity<List<TaskResponse>> getTasksDueSoon(Authentication authentication) {
         List<TaskResponse> datas = taskService.getTasksDueInNext3Days(authentication.getName());
@@ -33,6 +36,7 @@ public class EmployeeTaskController {
         return ResponseEntity.ok(datas);
     }
 
+    @Operation(summary = "Update the task status")
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateStatus(
             @PathVariable Long id,

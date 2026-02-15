@@ -5,6 +5,8 @@ import com.taskmanagementsystem.EmployeeTaskManagementSystem.dto.CreateUserReque
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.entity.User;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.exceptions.ResourceNotFoundException;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.UserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,14 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    private static final Logger log =
+            LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
     @Override
     public UserResponse createUser(CreateUserRequestDto request) {
 
-      // log.info("Creating user with username: {}", request.getUsername());
+       log.info("Creating user with username: {}", request.getUsername());
 
         if(request == null)
         {
@@ -40,11 +46,16 @@ public class UserServiceImpl implements UserService{
 
         User saved = userRepository.save(user);
 
+        log.info("User created successfully with id: {} and username: {}", saved.getId(), saved.getUsername());
+
         return mapToResponse(saved);
     }
 
     @Override
     public List<UserResponse> getAllUsers() {
+
+        log.info("Fetching all users");
+
         return userRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
@@ -54,11 +65,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public void activateDeactivateUser(Long userId, boolean active) {
 
+        log.info("Attempting to {} user with id: {}", (active ? "activate" : "deactivate"), userId);
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
 
         user.setActive(active);
+        log.info("User with id: {} successfully {}", userId, (active ? "activated" : "deactivated"));
         userRepository.save(user);
     }
 

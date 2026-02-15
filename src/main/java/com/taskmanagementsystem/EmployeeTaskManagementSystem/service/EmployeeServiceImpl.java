@@ -9,6 +9,8 @@ import com.taskmanagementsystem.EmployeeTaskManagementSystem.exceptions.Resource
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.EmployeeResponse;
 import com.taskmanagementsystem.EmployeeTaskManagementSystem.response.TaskResponse;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +25,18 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private TaskRepository taskRepository;
 
+    private static final Logger log =
+            LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
     @Override
     public EmployeeResponse createEmployee(EmployeeRequestDto request) {
 
-        // log.info("Creating employee with ID: {}", request.getEmployeeId());
+        log.info("Creating employee with ID: {}", request.getEmployeeId());
 
         if(checkRequest(request)){
-            throw new ResourceNotFoundException("Employee name and employee id cannot be null");
+            log.error("Invalid EmployeeRequestDto: employeeName='{}', employeeId='{}'",
+                    request.getEmployeeName(), request.getEmployeeId());
+            throw new IllegalArgumentException("Employee name and employee id cannot be null");
         }
 
         Employee employee = Employee.builder()
@@ -47,16 +54,21 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeResponse updateEmployee(Long id, EmployeeRequestDto request) {
 
+        log.info("Attempting to update employee with id: {}", id);
+
         if(checkRequest(request)){
-            throw new ResourceNotFoundException("Employee name and employee id cannot be null");
+            log.info("Cannot find employee with id: {}", id);
+            throw new IllegalArgumentException("Employee name and employee id cannot be null");
         }
 
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Employee not found"));
+                .orElseThrow(() -> {
+                    log.error("Employee not found with id: {}", id);
+                    return new ResourceNotFoundException("Employee not found with id: " + id);
+                });
 
         if(request.getEmail() != null && !isValidEmail(request.getEmail())) {
-            throw new ResourceNotFoundException("Invalid email");
+            throw new IllegalArgumentException("Invalid email");
         }
 
         employee.setEmployeeName(request.getEmployeeName());
@@ -72,20 +84,24 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
     public void deleteEmployee(Long id) {
 
+        log.info("Attempting to delete employee with id: {}", id);
+
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Employee not found"));
+                .orElseThrow(() -> {
+                    log.error("Employee not found for delete with id: {}", id);
+                    return new ResourceNotFoundException("Employee not found with id: " + id);
+                });
 
         taskRepository.deleteByAssignedEmployeeId(employee.getId());
-
-
-       // System.out.println("paisos");
 
         employeeRepository.delete(employee);
     }
 
     @Override
     public List<EmployeeResponse> getAllEmployees() {
+
+        log.info("Fetching all employees");
+
         return employeeRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
@@ -95,9 +111,13 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeResponse getEmployeeById(Long id) {
 
+        log.info("Fetching employee with id: {}", id);
+
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Employee not found"));
+                .orElseThrow(() -> {
+                    log.error("Employee not found for fetch with id: {}", id);
+                    return new ResourceNotFoundException("Employee not found with id: " + id);
+                });
 
         return mapToResponse(employee);
     }
@@ -126,7 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return email.matches(emailRegex);
+        String emailCheck = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailCheck);
     }
 }
